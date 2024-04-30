@@ -51,7 +51,8 @@ type MunicipalitiesReconciler struct {
 // +kubebuilder:rbac:groups=municipality.municipalities.rvig,resources=municipalities/status,verbs=get;update;patch
 // +kubebuilder:rbac:groups=municipality.municipalities.rvig,resources=municipalities/finalizers,verbs=update
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
-// +kubebuilder:rbac:groups=core,resources=services,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=route.openshift.io,resources=routes,verbs=get;list;watch;create;update;patch;delete
 func (r *MunicipalitiesReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logger := log.FromContext(ctx)
 	logger.Info("reconcile start")
@@ -151,7 +152,7 @@ func (r *MunicipalitiesReconciler) createMunicipality(ctx context.Context, munic
 				},
 			},
 		}
-		err = r.Create(ctx, &svc)
+		err = r.Create(ctx, svc)
 		if err != nil {
 			logger.Error(err, "unable to create service")
 		} else {
@@ -175,8 +176,7 @@ func (r *MunicipalitiesReconciler) createMunicipality(ctx context.Context, munic
 				},
 			},
 		}
-
-		err = r.Create(ctx, &route)
+		err = r.Create(ctx, route)
 		if err != nil {
 			logger.Error(err, "unable to create route")
 		} else {
