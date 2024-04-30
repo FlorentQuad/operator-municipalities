@@ -1,0 +1,12 @@
+apiVersion: municipality.municipalities.rvig/v1alpha1
+kind: Municipalities
+metadata:
+  labels:
+    app.kubernetes.io/name: municipalities
+    app.kubernetes.io/instance: municipalities-sample
+    app.kubernetes.io/part-of: operator-municipalities
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: operator-municipalities
+  name: municipalities-sample
+spec:
+  # TODO(user): Add fields here

@@ -1,0 +1,31 @@
+# permissions for end users to edit municipalities.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: clusterrole
+    app.kubernetes.io/instance: municipalities-editor-role
+    app.kubernetes.io/component: rbac
+    app.kubernetes.io/created-by: operator-municipalities
+    app.kubernetes.io/part-of: operator-municipalities
+    app.kubernetes.io/managed-by: kustomize
+  name: municipalities-editor-role
+rules:
+- apiGroups:
+  - municipality.municipalities.rvig
+  resources:
+  - municipalities
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - municipality.municipalities.rvig
+  resources:
+  - municipalities/status
+  verbs:
+  - get
