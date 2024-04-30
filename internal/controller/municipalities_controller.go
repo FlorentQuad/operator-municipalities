@@ -172,7 +172,7 @@ func (r *MunicipalitiesReconciler) createMunicipality(ctx context.Context, munic
 					Name: municipality,
 				},
 				TLS: &routev1.TLSConfig{
-					InsecureEdgeTerminationPolicy: routev1.InsecureEdgeTerminationPolicyRedirect,
+					InsecureEdgeTerminationPolicy: routev1.InsecureEdgeTerminationPolicyNone,
 					Termination:                   routev1.TLSTerminationEdge,
 				},
 			},
@@ -191,6 +191,37 @@ func (r *MunicipalitiesReconciler) createMunicipality(ctx context.Context, munic
 
 func (r *MunicipalitiesReconciler) removeMunicipality(ctx context.Context, municipality string, namespace string) {
 	logger := log.FromContext(ctx)
+
+	depl := &appsv1.Deployment{}
+	resourceName := types.NamespacedName{Name: municipality, Namespace: namespace}
+	if err := r.Get(ctx, resourceName, depl); err == nil {
+		err = r.Delete(ctx, depl)
+		if err != nil {
+			logger.Error(err, "found deployment, but could not delete it")
+		}
+	} else {
+		logger.Error(err, "could not find deployment of municipality "+municipality)
+	}
+
+	svc := &corev1.Service{}
+	if err := r.Get(ctx, resourceName, svc); err == nil {
+		err = r.Delete(ctx, svc)
+		if err != nil {
+			logger.Error(err, "found service, but could not delete it")
+		}
+	} else {
+		logger.Error(err, "could not find service of municipality "+municipality)
+	}
+
+	route := &routev1.Route{}
+	if err := r.Get(ctx, resourceName, route); err == nil {
+		err = r.Delete(ctx, route)
+		if err != nil {
+			logger.Error(err, "found route, but could not delete it")
+		}
+	} else {
+		logger.Error(err, "could not find route of municipality "+municipality)
+	}
 
 	logger.Info("deleted " + municipality)
 }
