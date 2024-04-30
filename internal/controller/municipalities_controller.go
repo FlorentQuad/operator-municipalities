@@ -57,6 +57,7 @@ func (r *MunicipalitiesReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 	logger := log.FromContext(ctx)
 	logger.Info("reconcile start")
 
+	logger.Info("get municipality custom resource")
 	mResource := &municipalityv1alpha1.Municipalities{}
 	err := r.Get(ctx, req.NamespacedName, mResource)
 	if err != nil {
