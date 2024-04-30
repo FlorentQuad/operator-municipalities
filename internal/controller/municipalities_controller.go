@@ -53,11 +53,11 @@ type MunicipalitiesReconciler struct {
 // +kubebuilder:rbac:groups=apps,resources=deployments,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups="",resources=services,verbs=get;list;watch;create;update;patch;delete
 // +kubebuilder:rbac:groups=route.openshift.io,resources=routes,verbs=get;list;watch;create;update;patch;delete
+
 func (r *MunicipalitiesReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	logger := log.FromContext(ctx)
 	logger.Info("reconcile start")
 
-	logger.Info("get municipality custom resource")
 	mResource := &municipalityv1alpha1.Municipalities{}
 	err := r.Get(ctx, req.NamespacedName, mResource)
 	if err != nil {
